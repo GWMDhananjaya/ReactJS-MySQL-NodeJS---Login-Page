@@ -13,6 +13,19 @@
         database:"login",  
  });
 
+app.post('/login', (req, res) => {
+    const sql = "SELECT * FROM test WHERE email = ? AND password = ?";
+    const values = [req.body.email, req.body.password];
+
+    db.query(sql, [values], (err, data) => {
+        if(err) return res.json("Login Failed");
+        return res.json(data);
+    });
+
+       
+});
+
+
  app.listen(3001, () => {
      console.log('Server is running on port 3001');
  });
