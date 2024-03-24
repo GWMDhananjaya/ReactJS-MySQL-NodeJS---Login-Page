@@ -3,8 +3,9 @@
  const cors = require('cors');
 
  const app = express();
+ app.use(express.json());
+app.use(cors());
 
- app.use(cors());
 
  const db = mysql.createConnection({
         host: "localhost",
@@ -14,12 +15,17 @@
  });
 
 app.post('/login', (req, res) => {
-    const sql = "SELECT * FROM test WHERE email = ? AND password = ?";
-    const values = [req.body.email, req.body.password];
+    const sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+    
 
-    db.query(sql, [values], (err, data) => {
+    db.query(sql, [req.body.email, req.body.password], (err, data) => {
         if(err) return res.json("Login Failed");
-        return res.json(data);
+        if(data.length > 0){
+            res.json("Login Successful");
+        }
+        else{
+            res.json("No user found");
+        }
     });
 
        
